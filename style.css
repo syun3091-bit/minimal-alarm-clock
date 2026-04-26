@@ -72,6 +72,26 @@ body {
   opacity: 0.4;
 }
 
+.empty-state-btn {
+  margin-top: 20px;
+  padding: 12px 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.empty-state-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.4);
+}
+
 /* ── Alarm Card ── */
 
 .alarm-card {
@@ -175,18 +195,50 @@ body {
   background: white;
 }
 
-/* ── Delete Button ── */
+/* ── List Header ── */
 
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.alarm-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1px 8px;
+  font-size: 12px;
+  margin-left: 8px;
+  color: var(--accent);
+}
+
+/* ── Edit / Delete Buttons ── */
+
+.edit-btn,
 .delete-btn {
   background: none;
   border: none;
-  color: var(--text-muted);
   cursor: pointer;
   padding: 8px;
   border-radius: 8px;
   font-size: 16px;
   line-height: 1;
   transition: color 0.2s, background 0.2s;
+  color: var(--text-muted);
+}
+
+.edit-btn:hover {
+  color: var(--accent);
+  background: rgba(108, 99, 255, 0.12);
 }
 
 .delete-btn:hover {

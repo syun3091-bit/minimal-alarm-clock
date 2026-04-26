@@ -2,21 +2,24 @@ class AlarmApp {
   constructor() {
     this.alarms = JSON.parse(localStorage.getItem('alarms') || '[]');
     this.activeAlarm = null;
-    this.audioCtx = null;
+    this.editingId   = null;
+    this.audioCtx    = null;
     this.alarmInterval = null;
 
-    this.$time    = document.getElementById('currentTime');
-    this.$date    = document.getElementById('currentDate');
-    this.$list    = document.getElementById('alarmList');
-    this.$empty   = document.getElementById('emptyState');
-    this.$overlay = document.getElementById('modalOverlay');
-    this.$tInput  = document.getElementById('alarmTime');
-    this.$lInput  = document.getElementById('alarmLabel');
-    this.$notif   = document.getElementById('alarmNotification');
-    this.$nTime   = document.getElementById('notifTime');
-    this.$nLabel  = document.getElementById('notifLabel');
+    this.$time        = document.getElementById('currentTime');
+    this.$date        = document.getElementById('currentDate');
+    this.$list        = document.getElementById('alarmList');
+    this.$empty       = document.getElementById('emptyState');
+    this.$overlay     = document.getElementById('modalOverlay');
+    this.$modalTitle  = document.getElementById('modalTitle');
+    this.$tInput      = document.getElementById('alarmTime');
+    this.$lInput      = document.getElementById('alarmLabel');
+    this.$notif       = document.getElementById('alarmNotification');
+    this.$nTime       = document.getElementById('notifTime');
+    this.$nLabel      = document.getElementById('notifLabel');
 
     document.getElementById('addBtn').addEventListener('click', () => this.openModal());
+    document.getElementById('emptyAddBtn').addEventListener('click', () => this.openModal());
     document.getElementById('cancelBtn').addEventListener('click', () => this.closeModal());
     document.getElementById('saveBtn').addEventListener('click', () => this.saveAlarm());
     document.getElementById('snoozeBtn').addEventListener('click', () => this.snooze());
@@ -108,7 +111,6 @@ class AlarmApp {
   snooze() {
     this.stopSound();
     this.$notif.classList.remove('active');
-
     const snoozeAt = new Date(Date.now() + 5 * 60 * 1000);
     const pad = n => String(n).padStart(2, '0');
     this.alarms.push({
@@ -130,6 +132,8 @@ class AlarmApp {
   }
 
   openModal() {
+    this.editingId = null;
+    this.$modalTitle.textContent = 'New Alarm';
     const now = new Date();
     const pad = n => String(n).padStart(2, '0');
     this.$tInput.value = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
@@ -138,14 +142,32 @@ class AlarmApp {
     setTimeout(() => this.$tInput.focus(), 100);
   }
 
+  openEditModal(alarm) {
+    this.editingId = alarm.id;
+    this.$modalTitle.textContent = 'Edit Alarm';
+    this.$tInput.value = alarm.time;
+    this.$lInput.value = alarm.label || '';
+    this.$overlay.classList.add('open');
+    setTimeout(() => this.$tInput.focus(), 100);
+  }
+
   closeModal() {
     this.$overlay.classList.remove('open');
+    this.editingId = null;
   }
 
   saveAlarm() {
     const time = this.$tInput.value;
     if (!time) return;
-    this.alarms.push({ id: Date.now(), time, label: this.$lInput.value.trim(), enabled: true });
+    const label = this.$lInput.value.trim();
+
+    if (this.editingId !== null) {
+      const alarm = this.alarms.find(a => a.id === this.editingId);
+      if (alarm) { alarm.time = time; alarm.label = label; }
+    } else {
+      this.alarms.push({ id: Date.now(), time, label, enabled: true });
+    }
+
     this.alarms.sort((a, b) => a.time.localeCompare(b.time));
     this.save();
     this.render();
@@ -168,13 +190,18 @@ class AlarmApp {
   }
 
   render() {
-    this.$list.querySelectorAll('.alarm-card').forEach(el => el.remove());
+    this.$list.querySelectorAll('.alarm-card, .list-header').forEach(el => el.remove());
 
     if (this.alarms.length === 0) {
       this.$empty.style.display = 'block';
       return;
     }
     this.$empty.style.display = 'none';
+
+    const header = document.createElement('div');
+    header.className = 'list-header';
+    header.innerHTML = `Alarms <span class="alarm-count">${this.alarms.length}</span>`;
+    this.$list.insertBefore(header, this.$empty);
 
     this.alarms.forEach(alarm => {
       const card = document.createElement('div');
@@ -189,10 +216,12 @@ class AlarmApp {
             <input type="checkbox" ${alarm.enabled ? 'checked' : ''}>
             <span class="toggle-slider"></span>
           </label>
+          <button class="edit-btn" aria-label="Edit alarm">✏</button>
           <button class="delete-btn" aria-label="Delete alarm">✕</button>
         </div>`;
 
       card.querySelector('input').addEventListener('change', () => this.toggleAlarm(alarm.id));
+      card.querySelector('.edit-btn').addEventListener('click', () => this.openEditModal(alarm));
       card.querySelector('.delete-btn').addEventListener('click', () => this.deleteAlarm(alarm.id));
       this.$list.appendChild(card);
     });
