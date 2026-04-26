@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimal Alarm Clock</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="current-time" id="currentTime">00:00:00</div>
+      <div class="current-date" id="currentDate"></div>
+    </header>
+
+    <main class="alarm-list" id="alarmList">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">⏰</div>
+        <p>No alarms set</p>
+      </div>
+    </main>
+
+    <button class="fab" id="addBtn" aria-label="Add alarm">+</button>
+  </div>
+
+  <!-- Add Alarm Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h2>New Alarm</h2>
+      <div class="field">
+        <input type="time" id="alarmTime" class="time-input">
+      </div>
+      <div class="field">
+        <input type="text" id="alarmLabel" class="label-input" placeholder="Label (optional)" maxlength="30">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancelBtn">Cancel</button>
+        <button class="btn-save" id="saveBtn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alarm Notification Overlay -->
+  <div class="alarm-notification" id="alarmNotification">
+    <div class="alarm-notification-content">
+      <div class="alarm-notification-icon">⏰</div>
+      <div class="alarm-notification-time" id="notifTime"></div>
+      <div class="alarm-notification-label" id="notifLabel"></div>
+      <div class="notification-actions">
+        <button class="btn-snooze" id="snoozeBtn">Snooze 5 min</button>
+        <button class="btn-dismiss" id="dismissBtn">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
