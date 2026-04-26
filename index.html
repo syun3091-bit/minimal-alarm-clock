@@ -7,8 +7,35 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
+
+  <!-- ── Login Screen ── -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">⏰</div>
+      <h1 class="login-title">Minimal Alarm</h1>
+      <p class="login-sub">Sign in to sync your alarms across devices</p>
+
+      <div id="loginMsg" class="login-message"></div>
+
+      <input type="email"    id="emailInput"    class="auth-input" placeholder="Email"    autocomplete="email">
+      <input type="password" id="passwordInput" class="auth-input" placeholder="Password" autocomplete="current-password">
+
+      <button id="authSubmit" class="btn-auth">Sign In</button>
+
+      <div class="auth-links">
+        <button id="toggleMode" class="link-btn">Don't have an account? Sign up</button>
+        <button id="forgotPass" class="link-btn">Forgot password?</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Main App ── -->
+  <div class="app" id="mainApp" style="display:none">
     <header class="header">
+      <div class="user-bar">
+        <span id="userEmail" class="user-email"></span>
+        <button id="logoutBtn" class="logout-btn">Sign out</button>
+      </div>
       <div class="current-time" id="currentTime">00:00:00</div>
       <div class="current-date" id="currentDate"></div>
     </header>
@@ -24,7 +51,7 @@
     <button class="fab" id="addBtn" aria-label="Add alarm">+</button>
   </div>
 
-  <!-- Add Alarm Modal -->
+  <!-- ── Add / Edit Alarm Modal ── -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
       <h2 id="modalTitle">New Alarm</h2>
@@ -36,24 +63,36 @@
       </div>
       <div class="modal-actions">
         <button class="btn-cancel" id="cancelBtn">Cancel</button>
-        <button class="btn-save" id="saveBtn">Save</button>
+        <button class="btn-save"   id="saveBtn">Save</button>
       </div>
     </div>
   </div>
 
-  <!-- Alarm Notification Overlay -->
+  <!-- ── Alarm Notification Overlay ── -->
   <div class="alarm-notification" id="alarmNotification">
     <div class="alarm-notification-content">
       <div class="alarm-notification-icon">⏰</div>
-      <div class="alarm-notification-time" id="notifTime"></div>
+      <div class="alarm-notification-time"  id="notifTime"></div>
       <div class="alarm-notification-label" id="notifLabel"></div>
       <div class="notification-actions">
-        <button class="btn-snooze" id="snoozeBtn">Snooze 5 min</button>
+        <button class="btn-snooze"  id="snoozeBtn">Snooze 5 min</button>
         <button class="btn-dismiss" id="dismissBtn">Dismiss</button>
       </div>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="auth.js"></script>
   <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let app = null;
+      new AuthManager({
+        onLogin:  user => { app = new AlarmApp(user.id); },
+        onLogout: ()   => { app?.destroy(); app = null; },
+      });
+    });
+  </script>
 </body>
 </html>

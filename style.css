@@ -494,6 +494,155 @@ body {
   background: var(--accent-hover);
 }
 
+/* ── Login Screen ── */
+
+.login-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 300;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-logo {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+}
+
+.login-sub {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.login-message {
+  min-height: 20px;
+  font-size: 13px;
+  text-align: center;
+  border-radius: 8px;
+  padding: 0 4px;
+}
+
+.login-message.err { color: var(--danger); }
+.login-message.ok  { color: var(--success); }
+
+.auth-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-input:focus { border-color: var(--accent); }
+.auth-input::placeholder { color: var(--text-muted); }
+
+.btn-auth {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 4px;
+}
+
+.btn-auth:hover { background: var(--accent-hover); box-shadow: 0 4px 16px rgba(108,99,255,0.4); }
+.btn-auth:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.auth-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.link-btn:hover { color: var(--accent); }
+
+/* ── User Bar ── */
+
+.user-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 0 0 8px;
+}
+
+.user-email {
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.logout-btn:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+/* ── Loading State ── */
+
+.loading-state {
+  text-align: center;
+  padding: 64px 24px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
 /* ── Scrollbar ── */
 
 ::-webkit-scrollbar { width: 6px; }
